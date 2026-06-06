@@ -468,7 +468,8 @@ def ai_models():
             c = GeminiClient()
         else:
             from app.agent.llm import OllamaClient
-            c = OllamaClient(endpoint=ctx._g("ollama_endpoint"))
+            c = OllamaClient(endpoint=ctx._g("ollama_endpoint"),
+                             num_ctx=ctx._g("ollama_num_ctx"))
         if not c.is_available():
             return {"available": False, "text_models": [], "vision_models": [],
                     "error": f"{provider} 不可用(檢查 API key / endpoint)"}
@@ -523,7 +524,8 @@ async def agent_ws(ws: WebSocket):
         llm = GeminiClient()
         model = agent_ctx._g("gemini_planner_model")
     else:
-        llm = OllamaClient(endpoint=agent_ctx._g("ollama_endpoint"))
+        llm = OllamaClient(endpoint=agent_ctx._g("ollama_endpoint"),
+                           num_ctx=agent_ctx._g("ollama_num_ctx"))
         model = agent_ctx._g("ollama_planner_model")
 
     registry = build_default_registry(agent_ctx)

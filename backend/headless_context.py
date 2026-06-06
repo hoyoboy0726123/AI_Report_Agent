@@ -308,7 +308,8 @@ class HeadlessContext:
             model = self._g("gemini_reviewer_model")
         else:
             from app.agent.llm import OllamaClient
-            client = OllamaClient(endpoint=self._g("ollama_endpoint"))
+            client = OllamaClient(endpoint=self._g("ollama_endpoint"),
+                                  num_ctx=self._g("ollama_num_ctx"))
             model = self._g("ollama_reviewer_model")
         if not client.is_available():
             return client, model, f"{provider} reviewer 不可用（檢查 API key / endpoint）"
@@ -324,7 +325,8 @@ class HeadlessContext:
             model = self._g("gemini_planner_model")
         else:
             from app.agent.llm import OllamaClient
-            client = OllamaClient(endpoint=self._g("ollama_endpoint"))
+            client = OllamaClient(endpoint=self._g("ollama_endpoint"),
+                                  num_ctx=self._g("ollama_num_ctx"))
             model = self._g("ollama_planner_model")
         if not client.is_available():
             return client, model, f"{provider} planner 不可用（檢查 API key / endpoint）"

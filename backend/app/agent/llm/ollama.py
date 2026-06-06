@@ -25,13 +25,20 @@ class OllamaClient(LLMClient):
         "vision",
     )
 
-    def __init__(self, endpoint=None, timeout=5):
+    def __init__(self, endpoint=None, timeout=5, num_ctx=None):
         self.endpoint = (
             endpoint
             or os.environ.get("OLLAMA_ENDPOINT")
             or "http://localhost:11434"
         ).rstrip("/")
         self.timeout = timeout
+        # Ollama 預設 context 只有 2048/4096,塞不下 48 個工具 schema 會被靜默截斷
+        # 導致模型回空、完全不呼叫工具。固定拉高,且每次請求都要帶(否則會被打回預設)。
+        try:
+            self.num_ctx = int(num_ctx) if num_ctx else int(
+                os.environ.get("OLLAMA_NUM_CTX", "32768"))
+        except (TypeError, ValueError):
+            self.num_ctx = 32768
 
     def _get(self, path):
         with urllib.request.urlopen(f"{self.endpoint}{path}", timeout=self.timeout) as r:
@@ -83,6 +90,7 @@ class OllamaClient(LLMClient):
             "model": model,
             "stream": False,
             "messages": [self._msg_to_ollama(m) for m in messages],
+            "options": {"num_ctx": self.num_ctx},
         }
         if tools:
             payload["tools"] = [
@@ -144,7 +152,8 @@ class OllamaClient(LLMClient):
             }
         )
 
-        payload = {"model": model, "stream": False, "messages": messages}
+        payload = {"model": model, "stream": False, "messages": messages,
+                   "options": {"num_ctx": self.num_ctx}}
 
         try:
             body = self._post_json("/api/chat", payload, timeout=300)

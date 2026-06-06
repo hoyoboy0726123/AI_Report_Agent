@@ -27,6 +27,8 @@ DEFAULTS = {
     "ollama_endpoint": "http://localhost:11434",
     "ollama_planner_model": "",
     "ollama_reviewer_model": "",
+    # Ollama context 視窗;太小會塞不下工具 schema 導致 agent 靜默失效
+    "ollama_num_ctx": 32768,
     "enable_review": True,
     "review_sampling_percent": 100,
     "max_review_retries": 3,
