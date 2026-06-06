@@ -1,0 +1,46 @@
+# ===== Secrets (絕對不上傳) =====
+.env
+.env.*
+*.key
+*.pem
+*.p12
+*.pfx
+*credentials*
+*secret*
+*token*
+id_rsa*
+id_ed25519*
+
+# ===== Python =====
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+
+# ===== Node / Frontend =====
+node_modules/
+frontend/dist/
+frontend/dist-ssr/
+*.local
+
+# ===== 前端 build 輸出(由 npm run build 產生,不入庫) =====
+backend/static/assets/
+
+# ===== 測試暫存資料夾與產物 =====
+_*/
+*_log.txt
+*.log
+
+# ===== Office 暫存 / 產出 =====
+~$*
+*.tmp
+
+# ===== OS / Editor =====
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.swp

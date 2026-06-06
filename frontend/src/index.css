@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root { color-scheme: light dark; }
+  /* 整體等比放大:Tailwind 字級與間距都用 rem,調 root font-size 會一起放大。
+     用 clamp 讓大螢幕再大一點,小螢幕不過頭。 */
+  html { font-size: clamp(16px, 0.7vw + 12px, 19px); }
+  html, body, #root { height: 100%; }
+  body { @apply bg-slate-100 text-slate-900 antialiased; margin: 0; }
+  .dark body { @apply bg-slate-950 text-slate-100; }
+}
+
+@layer components {
+  .card {
+    @apply rounded-xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium
+           transition-colors duration-150 cursor-pointer disabled:cursor-not-allowed disabled:opacity-50
+           focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-400;
+  }
+  .btn-primary { @apply btn bg-brand-600 text-white hover:bg-brand-700; }
+  .btn-ghost   { @apply btn bg-transparent text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800; }
+  .btn-outline { @apply btn border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800; }
+  .btn-danger  { @apply btn bg-rose-600 text-white hover:bg-rose-700; }
+  .input {
+    @apply w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm
+           placeholder:text-slate-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-200
+           dark:border-slate-700 dark:bg-slate-950 dark:placeholder:text-slate-600 dark:focus:ring-brand-900;
+  }
+  .label { @apply mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400; }
+  .chip  { @apply inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs font-medium; }
+}

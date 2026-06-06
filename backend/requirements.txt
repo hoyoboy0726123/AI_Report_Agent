@@ -1,0 +1,16 @@
+# AI Report Agent — 後端依賴
+# 沿用原 AI- 專案的報告引擎,額外加 Web 服務層
+
+fastapi>=0.110
+uvicorn[standard]>=0.29
+
+# 報告引擎(與原 AI- 專案相同)
+pandas
+openpyxl
+docxtpl>=0.20.2
+python-docx
+pymupdf>=1.27.0
+
+# AI(選用:Gemini planner / reviewer)
+google-genai>=2.0.0
+python-dotenv>=1.0.0
