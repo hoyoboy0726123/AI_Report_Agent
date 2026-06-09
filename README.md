@@ -1,4 +1,38 @@
-# AI Report Agent
+# 🤖 AI Report Agent
+
+> 一份範本 + 一張 Excel,**批次產出每列一份報告**(Word / Excel / PPTX)。
+> 還有 **AI 助手**:用中文一句話交辦,Agent 自己看設定、對應標籤、驗證、產出 —— 不必一步步點。
+
+![License](https://img.shields.io/badge/License-MIT-green.svg)
+![Python](https://img.shields.io/badge/Python-3.11%2B-blue.svg)
+![FastAPI](https://img.shields.io/badge/Backend-FastAPI-009688.svg)
+![React](https://img.shields.io/badge/Frontend-React%2019-61DAFB.svg)
+
+![AI Report Agent 介面](docs/screenshot.png)
+
+## ✨ 特色
+
+- 📄 **批次報告**:Word / Excel / PPTX 範本 × Excel 資料,一列一份、自動命名
+- 🏷️ **視覺化標籤對應**:點欄位 → 點位置插入;或讓 AI 一鍵建議(連無標籤範本也能自動補)
+- 🤖 **AI 助手**:中文一句話交辦,Agent 自動驗證 + 產出,卡關會主動問你
+- 🖼️ **圖片自動配置**:依檔名 / 版面把照片放進報告
+- ✅ **AI 審查**:產出後逐份用視覺模型評分,不合格自動分流
+- 🔒 **本機執行**:資料不外流;可用本機 Ollama 免雲端,或接 Google Gemini
+
+## 🚀 快速開始
+
+```bash
+# 1) 安裝後端依賴(擇一)
+uv sync                                          # 方式一:uv,依 .python-version 自動裝對的 Python
+# 方式二(pip):py -3.13 -m venv .venv
+#              .venv\Scripts\python -m pip install -r backend\requirements.txt
+
+# 2) 啟動:雙擊 launch.bat → 瀏覽器開 http://127.0.0.1:8756
+```
+
+> 📖 **完整圖文操作手冊** → [`docs/AI_Report_Agent_操作SOP.pdf`](docs/AI_Report_Agent_操作SOP.pdf)(每個畫面截圖 + 紅框標註 + 步驟)
+
+---
 
 原 `AI-`(customtkinter 桌面工具)的**前端重構版**:把混亂的多分頁介面,改成一條**看得見的報告流水線**。後端沿用既有報告引擎,前端改用 React 視覺化呈現。
 
