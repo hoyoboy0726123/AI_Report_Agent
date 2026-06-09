@@ -340,13 +340,41 @@ class HeadlessContext:
         from app.agent.template_edit import read_docx_text as _read
         return _read(word_path or self._g("word_path"), max_paragraphs=max_paragraphs)
 
+    _MAPPED_SUFFIX = "_已標註"
+
+    def _ensure_mapped_copy(self) -> str:
+        """首次對範本套用標籤前,另存一份『_已標註』副本以保護空白母版,
+        並把 word_path 切到副本;之後的編輯都落在副本上。複製失敗則退回原檔(不阻斷)。"""
+        import shutil
+        wp = self._g("word_path")
+        if not wp or not os.path.isfile(wp):
+            return wp
+        stem, ext = os.path.splitext(wp)
+        if stem.endswith(self._MAPPED_SUFFIX):
+            return wp  # 已是標註副本,直接用
+        copy = stem + self._MAPPED_SUFFIX + ext
+        try:
+            shutil.copy(wp, copy)
+        except Exception:
+            return wp
+        self._set("word_path", copy)
+        return copy
+
     def rename_template_variable(self, old: str, new: str, word_path: str = "") -> dict:
         from app.agent.template_edit import rename_template_variable as _rename
-        return _rename(word_path or self._g("word_path"), old, new)
+        target = word_path or self._ensure_mapped_copy()
+        r = _rename(target, old, new)
+        if isinstance(r, dict) and "error" not in r:
+            r["word_path"] = target
+        return r
 
     def insert_template_variable(self, anchor: str, variable: str, position: str = "after", word_path: str = "") -> dict:
         from app.agent.template_edit import insert_template_variable as _insert
-        return _insert(word_path or self._g("word_path"), anchor, variable, position)
+        target = word_path or self._ensure_mapped_copy()
+        r = _insert(target, anchor, variable, position)
+        if isinstance(r, dict) and "error" not in r:
+            r["word_path"] = target
+        return r
 
     def suggest_mappings(self, word_path: str = "", excel_path: str = "") -> dict:
         from app.agent.mapping_suggester import suggest_mappings as _suggest

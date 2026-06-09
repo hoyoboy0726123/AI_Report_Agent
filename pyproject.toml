@@ -1,0 +1,26 @@
+[project]
+name = "ai-report-agent"
+version = "0.1.0"
+description = "AI 報告自動化系統 — FastAPI 後端 + React 前端,支援 Gemini / 本機 Ollama 驅動的批次報告產生"
+readme = "README.md"
+requires-python = ">=3.11"
+
+# 依賴與 backend/requirements.txt 保持一致(pip 使用者讀 requirements.txt,uv 使用者讀此處)
+dependencies = [
+    "fastapi>=0.110",
+    "uvicorn[standard]>=0.29",
+    "pandas",
+    "openpyxl",
+    "docxtpl>=0.20.2",
+    "python-docx",
+    "python-pptx>=1.0.0",
+    "pymupdf>=1.27.0",
+    "pillow",
+    "pywin32; platform_system == 'Windows'",
+    "google-genai>=2.0.0",
+    "python-dotenv>=1.0.0",
+]
+
+[tool.uv]
+# 這是「應用程式」而非可安裝的函式庫,uv 只管理依賴、不打包專案本身
+package = false

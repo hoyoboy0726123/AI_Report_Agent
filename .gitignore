@@ -1,6 +1,7 @@
 # ===== Secrets (絕對不上傳) =====
 .env
 .env.*
+!.env.example
 *.key
 *.pem
 *.p12
@@ -25,8 +26,9 @@ frontend/dist/
 frontend/dist-ssr/
 *.local
 
-# ===== 前端 build 輸出(由 npm run build 產生,不入庫) =====
-backend/static/assets/
+# ===== 前端 build 輸出 =====
+# 隨 repo 一起提供(讓使用者免裝 Node、雙擊 launch.bat 即可用);
+# 改前端後執行 npm run build 會更新此處,記得一起 commit。
 
 # ===== 測試暫存資料夾與產物 =====
 _*/

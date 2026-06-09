@@ -9,8 +9,13 @@ pandas
 openpyxl
 docxtpl>=0.20.2
 python-docx
+python-pptx>=1.0.0
 pymupdf>=1.27.0
+Pillow
 
-# AI(選用:Gemini planner / reviewer)
+# Windows COM(docx/pptx 轉檔、視覺填充需要)
+pywin32; platform_system == "Windows"
+
+# AI(選用:Gemini planner / reviewer;Ollama 走 stdlib urllib 免額外套件)
 google-genai>=2.0.0
 python-dotenv>=1.0.0

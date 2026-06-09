@@ -337,6 +337,7 @@ function StepMap({ reportType, settings }: any) {
 }
 
 function WordTagEditor({ settings, picked, onInserted }: any) {
+  const { reload } = useSettings();
   const [paragraphs, setParagraphs] = useState<string[]>([]);
   const [hoverIdx, setHoverIdx] = useState<number | null>(null);
 
@@ -347,8 +348,11 @@ function WordTagEditor({ settings, picked, onInserted }: any) {
   async function insertAfter(text: string) {
     if (!picked) { alert("請先點左側一個 Excel 欄位"); return; }
     const r: any = await api.insertTag(text, picked, "after");
-    if (r?.error) alert(`插入失敗:${r.error}`);
-    else { onInserted(); if (settings.word_path) api.wordText(settings.word_path).then((rr) => setParagraphs(rr.paragraphs || [])); }
+    if (r?.error) { alert(`插入失敗:${r.error}`); return; }
+    onInserted();
+    const wp = r.word_path || settings.word_path; // 首次插入後端會切到 _已標註 副本
+    if (wp) api.wordText(wp).then((rr) => setParagraphs(rr.paragraphs || []));
+    if (r.word_path && r.word_path !== settings.word_path) reload(); // 同步設定路徑到副本
   }
 
   if (!settings.word_path) return <Empty icon={<FileText size={28} />} text="先在上一步選好 Word 範本" />;

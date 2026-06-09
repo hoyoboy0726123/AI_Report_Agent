@@ -43,19 +43,54 @@ AI_Report_Agent/
 | AI 引擎 | Gemini / Ollama 模型選擇、審查設定、呼叫預算 |
 | 設定 | 預設值、圖片寬度、熱鍵橋接目標 |
 
+## 安裝(後端依賴)
+
+本專案有**自己的隔離環境**,不再依賴其他專案。兩種方式擇一,結果都會建出專案根目錄的 `.venv`,`launch.bat` 通用。
+
+### 方式一:uv(建議,免煩惱 Python 版本)
+
+[uv](https://docs.astral.sh/uv/) 會依 `.python-version` **自動下載對的 Python(3.13)** 並安裝鎖定版依賴,使用者不會踩到「Python 版本不對」的坑。
+
+```
+:: 先裝 uv(只需一次):https://docs.astral.sh/uv/getting-started/installation/
+::   PowerShell: powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+uv sync
+```
+
+### 方式二:傳統 pip
+
+需要本機已有 Python 3.11+(建議 3.13)。
+
+```
+py -3.13 -m venv .venv
+.venv\Scripts\python -m pip install -r backend\requirements.txt
+```
+
+> 依賴清單同時維護於 `pyproject.toml`(uv 讀)與 `backend/requirements.txt`(pip 讀),兩者內容保持一致;改動其一請同步另一個。
+
+### 前端
+
+前端已 build 進 `backend/static`,**一般使用者免裝 Node**。只有要改前端原始碼才需要:
+
+```
+cd frontend
+npm install
+```
+
 ## 啟動
 
 ### 一鍵(正式版)
 ```
 launch.bat
 ```
-會用 `..\AI-\.venv` 的 Python 跑後端,並開瀏覽器到 http://127.0.0.1:8756
+用專案 `.venv` 的 Python 跑後端,並開瀏覽器到 http://127.0.0.1:8756。
+**只有一個程序**:後端同時供應 API 與已 build 的前端網頁。前端錯誤看瀏覽器 F12 Console,後端錯誤看那個命令視窗。
 
 ### 開發模式(前端熱更新)
 ```
 :: 終端機 1 — 後端
-..\AI-\.venv\Scripts\python.exe backend\server.py
-:: 終端機 2 — 前端 dev server(會 proxy /api 到後端)
+.venv\Scripts\python.exe backend\server.py
+:: 終端機 2 — 前端 dev server(會 proxy /api 與 WebSocket 到後端)
 cd frontend
 npm run dev
 ```
@@ -64,16 +99,16 @@ npm run dev
 ### 改前端後重新 build
 ```
 cd frontend
-npm run build      :: 輸出到 backend/static
+npm run build      :: 輸出到 backend/static,launch.bat 即吃到新版
 ```
 
-## 相依
+## 設定 API key
 
-後端:見 `backend/requirements.txt`(已安裝於 `AI-/.venv`)。
-前端:見 `frontend/package.json`。
+把 `GEMINI_API_KEY` 放在專案根目錄的 `.env`(參考 `.env.example`,不進版控)。
+用本機 Ollama 則免 key,走 `OLLAMA_ENDPOINT`(預設 `http://localhost:11434`)。
 
 ## 注意
 
 - **熱鍵橋接(Ctrl+Shift+M)** 需要本機 Office(COM),為進階功能;在「對應標籤」步驟用滑鼠即可完成相同的事。
 - **AI 審查 / docx 預覽** 需要本機安裝 Word(透過 COM 轉 PDF)。
-- API key 放 `AI-/.env` 的 `GEMINI_API_KEY`,不進版控。
+- `pywin32`(COM 相關)僅 Windows 安裝;非 Windows 平台這些進階功能不可用,核心報告產出仍正常。
